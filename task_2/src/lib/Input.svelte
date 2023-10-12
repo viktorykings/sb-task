@@ -21,16 +21,15 @@
   }
   function handleInput(event: Event) {
     const target = event.target as HTMLInputElement;
-    value = parseInt(target.value);
+    value = Number.isNaN(value) ? 0 : parseInt(target.value);
   }
   import { onMount } from "svelte";
   onMount(async function () {
     const response = await fetch(`https://open.er-api.com/v6/latest/USD`);
     const data = await response.json();
-    console.log(data, data.rates);
     Object.assign(rates, data.rates);
   });
-  async function getRandomNumber(curr: string) {
+  async function getData(curr: string) {
     const res = await fetch(`https://open.er-api.com/v6/latest/${curr}`);
     const data = await res.json();
 
@@ -41,8 +40,7 @@
       throw new Error(data);
     }
   }
-  let promise = getRandomNumber("USD");
-  console.log(promise);
+  let promise = getData("USD");
 </script>
 
 {#await promise}
